@@ -8,10 +8,12 @@
 </head>
 <body>
 
+    
 
     <?php
 
-        echo "Ciao, io sono Alessandro\n";
+        require("connessione.php");
+
 
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'POST'){
@@ -20,13 +22,22 @@
 
         } elseif ($method == 'GET'){
             
-            /*echo "Il metodo è GET";*/
+            $pagina=0;
+            $size=20;
 
-            $myObj->city = "New York";
 
-            $myJSON = json_encode($myObj);
+            echo "Il metodo è GET";
+            $query="SELECT * FROM employees order by id limit " . $pagina . "," . $size;
 
-            echo $myJSON;
+            if($result=$mysqli->query($query)){
+                while($row=$result->fetch_assoc()){
+                    
+                    $array[]=$row;
+
+                }
+            }       
+            $data=json_encode($array);
+            echo $data;  
 
         } elseif ($method == 'PUT'){
             
@@ -40,6 +51,8 @@
             
             echo "Metodo sconosciuto";
 }
+
+    mysqli_close($connessione);
 
     ?>
 
